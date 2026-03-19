@@ -34,5 +34,15 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'weather' => [
+    // Start with Open-Meteo because it is easy to wire up for MVP.
+    'base_url' => env('WEATHER_API_BASE_URL', 'https://api.open-meteo.com/v1'),
+    ],
+
+    '  openai' => [
+    // Keep the AI config in the backend only.
+    'api_key' => env('OPENAI_API_KEY'),
+    'model' => env('OPENAI_MODEL'),
+    ],
 
 ];
