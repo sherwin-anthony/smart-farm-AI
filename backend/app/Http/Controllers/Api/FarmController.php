@@ -6,6 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Farm;
 use Illuminate\Http\Request;
 
+// Purpose: handle all /api/farms requests.
+// Routing:
+// GET    /api/farms        -> index
+// POST   /api/farms        -> store
+// GET    /api/farms/{farm} -> show
+// PUT    /api/farms/{farm} -> update
+// DELETE /api/farms/{farm} -> destroy
+
 class FarmController extends Controller
 {
     public function index()
@@ -13,6 +21,9 @@ class FarmController extends Controller
         return response()->json(Farm::latest()->get());
     }
 
+
+    // Purpose: create one new farm record from the frontend form.
+    // Route: POST /api/farms
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -30,11 +41,17 @@ class FarmController extends Controller
         return response()->json($farm, 201);
     }
 
+
+    // Purpose: return one farm with related plots when needed later.
+    // Route: GET /api/farms/{farm}
     public function show(string $id)
     {
         return response()->json(Farm::findOrFail($id));
     }
 
+
+    // Purpose: update one farm record.
+    // Route: PUT/PATCH /api/farms/{farm}
     public function update(Request $request, string $id)
     {
         $farm = Farm::findOrFail($id);
@@ -54,6 +71,9 @@ class FarmController extends Controller
         return response()->json($farm);
     }
 
+
+    // Purpose: delete one farm record.
+    // Route: DELETE /api/farms/{farm}
     public function destroy(string $id)
     {
         $farm = Farm::findOrFail($id);
