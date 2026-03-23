@@ -1,6 +1,6 @@
 import axios from "axios";
 import { api } from "../../api/client";
-import type { AuthUser, LoginPayload, RegisterPayload } from "./types";
+import type { AuthUser, LoginPayload, RegisterPayload, UpdateUserPayload } from "./types";
 
 const csrf = axios.create({
   withCredentials: true,
@@ -31,6 +31,12 @@ export const loginUser = async (payload: LoginPayload) => {
 export const fetchCurrentUser = async (): Promise<AuthUser> => {
   const response = await api.get<AuthUser>("/user");
   return response.data;
+};
+
+export const updateCurrentUser = async (payload: UpdateUserPayload): Promise<AuthUser> => {
+  await getCsrfCookie();
+  const response = await api.put<{ message: string; user: AuthUser }>("/user", payload);
+  return response.data.user;
 };
 
 export const logoutUser = async (): Promise<void> => {

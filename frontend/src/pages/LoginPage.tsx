@@ -40,36 +40,44 @@ export default function LoginPage() {
   };
 
   return (
-    <main style={{ maxWidth: "420px", margin: "4rem auto", padding: "1.5rem" }}>
-      <h1>Login</h1>
+    <main className="auth-shell">
+      <section className="auth-card">
+        <div className="auth-brand">
+          <span className="auth-kicker">Welcome Back</span>
+          <h1>Sign in to your farm workspace</h1>
+          <p className="auth-subtitle">
+            Check your farm profile, dashboard snapshots, and the next bits of smart automation.
+          </p>
+        </div>
 
-      <form onSubmit={handleSubmit} style={{ display: "grid", gap: "0.75rem" }}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={(event) => setForm({ ...form, email: event.target.value })}
-          required
-        />
+        <form onSubmit={handleSubmit} className="auth-form">
+          <input
+            type="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={(event) => setForm({ ...form, email: event.target.value })}
+            required
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={(event) => setForm({ ...form, password: event.target.value })}
-          required
-        />
+          <input
+            type="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={(event) => setForm({ ...form, password: event.target.value })}
+            required
+          />
 
-        <button type="submit" disabled={submitting}>
-          {submitting ? "Signing in..." : "Login"}
-        </button>
-      </form>
+          <button type="submit" disabled={submitting}>
+            {submitting ? "Signing in..." : "Login"}
+          </button>
+        </form>
 
-      {error ? <p style={{ color: "crimson" }}>{error}</p> : null}
+        {error ? <p className="text-danger auth-helper">{error}</p> : null}
 
-      <p style={{ marginTop: "1rem" }}>
-        No account yet? <Link to="/register">Create one here</Link>.
-      </p>
+        <p className="auth-helper">
+          No account yet? <Link to="/register">Create one here</Link>.
+        </p>
+      </section>
     </main>
   );
 }

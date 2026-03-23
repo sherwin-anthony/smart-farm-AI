@@ -28,6 +28,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <DashboardPage /> },
           { path: "dashboard", element: <DashboardPage /> },
+          { path: "profile", element: <FarmProfilePage /> },
           { path: "farm-profile", element: <FarmProfilePage /> },
           { path: "farms", element: <FarmsPage /> },
           { path: "plots", element: <PlotsPage /> },

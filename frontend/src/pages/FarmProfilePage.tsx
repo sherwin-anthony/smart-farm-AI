@@ -1,14 +1,14 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
-import PageHeader from "../components/ui/PageHeader";
 import { useAuth } from "../features/auth/AuthContext";
-import { updateCurrentFarm } from "../features/farms/api";
+import { updateCurrentUser } from "../features/auth/api";
 
 export default function FarmProfilePage() {
-  const { farm, refreshAuth } = useAuth();
+  const { user, refreshAuth } = useAuth();
 
   const [form, setForm] = useState({
     name: "",
-    location: "",
+    email: "",
   });
 
   const [submitting, setSubmitting] = useState(false);
@@ -16,13 +16,13 @@ export default function FarmProfilePage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (farm) {
+    if (user) {
       setForm({
-        name: farm.name ?? "",
-        location: farm.location ?? "",
+        name: user.name ?? "",
+        email: user.email ?? "",
       });
     }
-  }, [farm]);
+  }, [user]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -32,65 +32,68 @@ export default function FarmProfilePage() {
       setMessage("");
       setError("");
 
-      await updateCurrentFarm({
+      await updateCurrentUser({
         name: form.name,
-        location: form.location,
+        email: form.email,
       });
 
       await refreshAuth();
-      setMessage("Farm profile updated.");
+      setMessage("User profile updated.");
     } catch (err) {
       console.error(err);
-      setError("Could not update farm profile.");
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.message ?? "Could not update user profile.");
+      } else {
+        setError("Could not update user profile.");
+      }
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <div>
-      <PageHeader
-        title="Farm Profile"
-        description="View and update the currently authenticated user's farm."
-      />
-
-      {!farm ? (
-        <p>No farm found for this account.</p>
+    <div className="stack">
+      {!user ? (
+        <section className="panel-card">
+          <p>No user details found for this account.</p>
+        </section>
       ) : (
-        <form
-          onSubmit={handleSubmit}
-          style={{
-            display: "grid",
-            gap: "0.75rem",
-            maxWidth: "520px",
-            border: "1px solid #ddd",
-            borderRadius: "0.75rem",
-            padding: "1rem",
-          }}
-        >
-          <input
-            type="text"
-            placeholder="Farm Name"
-            value={form.name}
-            onChange={(event) => setForm({ ...form, name: event.target.value })}
-            required
-          />
+        <section className="profile-card">
+          <form onSubmit={handleSubmit} className="profile-form">
+            <div className="row">
+              <label htmlFor="user-name">Name</label>
+              <input
+                id="user-name"
+                type="text"
+                placeholder="Full Name"
+                value={form.name}
+                onChange={(event) => setForm({ ...form, name: event.target.value })}
+                required
+              />
+            </div>
 
-          <input
-            type="text"
-            placeholder="Location"
-            value={form.location}
-            onChange={(event) => setForm({ ...form, location: event.target.value })}
-            required
-          />
+            <div className="row">
+              <label htmlFor="user-email">Email</label>
+              <input
+                id="user-email"
+                type="email"
+                placeholder="Email Address"
+                value={form.email}
+                onChange={(event) => setForm({ ...form, email: event.target.value })}
+                required
+              />
+            </div>
 
-          <button type="submit" disabled={submitting}>
-            {submitting ? "Saving..." : "Update Farm"}
-          </button>
+            <div className="split-actions">
+              <button type="submit" disabled={submitting}>
+                {submitting ? "Saving..." : "Update Profile"}
+              </button>
+            </div>
 
-          {message ? <p style={{ color: "green" }}>{message}</p> : null}
-          {error ? <p style={{ color: "crimson" }}>{error}</p> : null}
-        </form>
+            {message ? <p className="text-success">{message}</p> : null}
+            {error ? <p className="text-danger">{error}</p> : null}
+          </form>
+        </section>
       )}
     </div>
   );

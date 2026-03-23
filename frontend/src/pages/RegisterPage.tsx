@@ -44,68 +44,77 @@ export default function RegisterPage() {
   };
 
   return (
-    <main style={{ maxWidth: "480px", margin: "4rem auto", padding: "1.5rem" }}>
-      <h1>Register</h1>
+    <main className="auth-shell">
+      <section className="auth-card">
+        <div className="auth-brand">
+          <span className="auth-kicker">First Setup</span>
+          <h1>Create your owner account</h1>
+          <p className="auth-subtitle">
+            We&apos;ll create your login and your first farm together so the dashboard already knows
+            where home base is.
+          </p>
+        </div>
 
-      <form onSubmit={handleSubmit} style={{ display: "grid", gap: "0.75rem" }}>
-        <input
-          type="text"
-          placeholder="Owner Name"
-          value={form.owner_name}
-          onChange={(event) => setForm({ ...form, owner_name: event.target.value })}
-          required
-        />
+        <form onSubmit={handleSubmit} className="auth-form">
+          <input
+            type="text"
+            placeholder="Owner Name"
+            value={form.owner_name}
+            onChange={(event) => setForm({ ...form, owner_name: event.target.value })}
+            required
+          />
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={(event) => setForm({ ...form, email: event.target.value })}
-          required
-        />
+          <input
+            type="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={(event) => setForm({ ...form, email: event.target.value })}
+            required
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={(event) => setForm({ ...form, password: event.target.value })}
-          required
-        />
+          <input
+            type="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={(event) => setForm({ ...form, password: event.target.value })}
+            required
+          />
 
-        <input
-          type="password"
-          placeholder="Confirm Password"
-          value={form.password_confirmation}
-          onChange={(event) => setForm({ ...form, password_confirmation: event.target.value })}
-          required
-        />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={form.password_confirmation}
+            onChange={(event) => setForm({ ...form, password_confirmation: event.target.value })}
+            required
+          />
 
-        <input
-          type="text"
-          placeholder="Farm Name"
-          value={form.farm_name}
-          onChange={(event) => setForm({ ...form, farm_name: event.target.value })}
-          required
-        />
+          <input
+            type="text"
+            placeholder="Farm Name"
+            value={form.farm_name}
+            onChange={(event) => setForm({ ...form, farm_name: event.target.value })}
+            required
+          />
 
-        <input
-          type="text"
-          placeholder="Location"
-          value={form.location}
-          onChange={(event) => setForm({ ...form, location: event.target.value })}
-          required
-        />
+          <input
+            type="text"
+            placeholder="Location"
+            value={form.location}
+            onChange={(event) => setForm({ ...form, location: event.target.value })}
+            required
+          />
 
-        <button type="submit" disabled={submitting}>
-          {submitting ? "Creating account..." : "Register"}
-        </button>
-      </form>
+          <button type="submit" disabled={submitting}>
+            {submitting ? "Creating account..." : "Register"}
+          </button>
+        </form>
 
-      {error ? <p style={{ color: "crimson" }}>{error}</p> : null}
+        {error ? <p className="text-danger auth-helper">{error}</p> : null}
 
-      <p style={{ marginTop: "1rem" }}>
-        Already registered? <Link to="/login">Go to login</Link>.
-      </p>
+        <p className="auth-helper">
+          Already registered? <Link to="/login">Go to login</Link>.
+        </p>
+      </section>
     </main>
   );
 }

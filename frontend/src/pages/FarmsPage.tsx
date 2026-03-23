@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import Loader from "../components/ui/Loader";
-import PageHeader from "../components/ui/PageHeader";
 import { createFarm, deleteFarm, listFarms } from "../features/farms/api";
 import FarmForm from "../features/farms/components/FarmForm";
 import FarmList from "../features/farms/components/FarmList";
@@ -63,11 +62,6 @@ export default function FarmsPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Farms"
-        description="Create farms first. Plots, weather, and recommendations will attach here later."
-      />
-
       <FarmForm onSubmit={handleCreateFarm} submitting={submitting} />
 
       {error ? <p style={{ color: "crimson" }}>{error}</p> : null}
