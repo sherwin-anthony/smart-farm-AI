@@ -19,3 +19,15 @@ export const createFarm = async (payload: FarmPayload): Promise<Farm> => {
 export const deleteFarm = async (id: number): Promise<void> => {
   await api.delete(`/farms/${id}`);
 };
+
+export const getCurrentFarm = async (): Promise<Farm> => {
+  const response = await api.get<Farm>("/farm");
+  return response.data;
+};
+
+export const updateCurrentFarm = async (
+  payload: Pick<FarmPayload, "name" | "location">
+): Promise<Farm> => {
+  const response = await api.put<Farm>("/farm", payload);
+  return response.data;
+};

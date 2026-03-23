@@ -9,6 +9,9 @@ use App\Http\Controllers\Api\RecommendationController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\WeatherController;
 use App\Http\Controllers\Api\YieldPredictionController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CurrentFarmController;
+
 use Illuminate\Support\Facades\Route;
 
 // Farm structure.
@@ -35,3 +38,19 @@ Route::post('yield-predictions', [YieldPredictionController::class, 'store']);
 
 // AI assistant chat.
 Route::post('assistant/chat', [AssistantController::class, 'chat']);
+
+// Authentication + current user/farm session routes.
+// These stay under /api/... but also need web middleware for session support.
+Route::middleware('web')->group(function () {
+    Route::post('register', [AuthController::class, 'register']);
+    Route::post('login', [AuthController::class, 'login']);
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('logout', [AuthController::class, 'logout']);
+        Route::get('user', [AuthController::class, 'user']);
+
+        Route::get('farm', [CurrentFarmController::class, 'show']);
+        Route::put('farm', [CurrentFarmController::class, 'update']);
+    });
+});
+
