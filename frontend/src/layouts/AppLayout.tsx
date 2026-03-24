@@ -10,7 +10,6 @@ import {
   ListTodo,
   Mail,
   Map,
-  Menu,
   Search,
   Sprout,
   UserRound,
@@ -26,7 +25,6 @@ const links = [
   { to: "/weather", label: "Weather", icon: CloudSun },
   { to: "/recommendations", label: "Recommendations", icon: Lightbulb },
   { to: "/yield-predictions", label: "Yield", icon: BarChart3 },
-  { to: "/assistant", label: "Assistant", icon: Bot },
 ];
 
 const tools = [
@@ -68,9 +66,16 @@ export default function AppLayout() {
 
       <header className="utility-header">
         <div className="utility-left">
-          <button type="button" className="utility-square" aria-label="Toggle menu">
-            <Menu size={19} strokeWidth={2.2} />
-          </button>
+          <NavLink
+            to="/assistant"
+            className={({ isActive }) =>
+              isActive ? "utility-assistant utility-assistant-active" : "utility-assistant"
+            }
+            aria-label="Aura Farming AI"
+            title="Aura Farming AI"
+          >
+            <Bot size={20} strokeWidth={2.2} />
+          </NavLink>
 
           <div className="topbar-link-slot">
             {/* Top navbar links can be added here next. */}
