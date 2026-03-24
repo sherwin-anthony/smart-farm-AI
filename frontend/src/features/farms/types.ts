@@ -1,5 +1,5 @@
-// Purpose: frontend TypeScript types for the Farms module.
-// Routing: used by FarmsPage, FarmForm, FarmList, and farms/api.ts.
+// Purpose: frontend TypeScript types for farm data that now lives inside account settings.
+// Routing: used by auth context, profile settings, and farm API helpers.
 
 export type Farm = {
   id: number;

@@ -1,11 +1,10 @@
 import { api } from "../../api/client";
 import type { Farm, FarmPayload } from "./types";
 
-// Purpose: Farms module API calls.
+// Purpose: farm API helpers for account settings and any legacy farm CRUD flows.
 // Routing:
-// listFarms   -> GET    /api/farms
-// createFarm  -> POST   /api/farms
-// deleteFarm  -> DELETE /api/farms/{id}
+// getCurrentFarm   -> GET /api/farm
+// updateCurrentFarm -> PUT /api/farm
 export const listFarms = async (): Promise<Farm[]> => {
   const response = await api.get<Farm[]>("/farms");
   return response.data;
@@ -13,6 +12,11 @@ export const listFarms = async (): Promise<Farm[]> => {
 
 export const createFarm = async (payload: FarmPayload): Promise<Farm> => {
   const response = await api.post<Farm>("/farms", payload);
+  return response.data;
+};
+
+export const updateFarm = async (id: number, payload: FarmPayload): Promise<Farm> => {
+  const response = await api.put<Farm>(`/farms/${id}`, payload);
   return response.data;
 };
 
@@ -26,7 +30,7 @@ export const getCurrentFarm = async (): Promise<Farm> => {
 };
 
 export const updateCurrentFarm = async (
-  payload: Pick<FarmPayload, "name" | "location">
+  payload: Pick<FarmPayload, "location" | "size_hectares" | "notes">
 ): Promise<Farm> => {
   const response = await api.put<Farm>("/farm", payload);
   return response.data;

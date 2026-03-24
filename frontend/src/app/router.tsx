@@ -5,7 +5,6 @@ import AssistantPage from "../pages/AssistantPage";
 import CropsPage from "../pages/CropsPage";
 import DashboardPage from "../pages/DashboardPage";
 import FarmProfilePage from "../pages/FarmProfilePage";
-import FarmsPage from "../pages/FarmsPage";
 import LoginPage from "../pages/LoginPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import PlotsPage from "../pages/PlotsPage";
@@ -30,7 +29,6 @@ export const router = createBrowserRouter([
           { path: "dashboard", element: <DashboardPage /> },
           { path: "profile", element: <FarmProfilePage /> },
           { path: "farm-profile", element: <FarmProfilePage /> },
-          { path: "farms", element: <FarmsPage /> },
           { path: "plots", element: <PlotsPage /> },
           { path: "crops", element: <CropsPage /> },
           { path: "tasks", element: <TasksPage /> },

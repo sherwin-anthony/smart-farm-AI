@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import Loader from "../components/ui/Loader";
-import { createFarm, deleteFarm, listFarms } from "../features/farms/api";
+import { createFarm, deleteFarm, listFarms, updateFarm } from "../features/farms/api";
 import FarmForm from "../features/farms/components/FarmForm";
 import FarmList from "../features/farms/components/FarmList";
 import type { Farm, FarmPayload } from "../features/farms/types";
@@ -11,6 +11,7 @@ export default function FarmsPage() {
   const [farms, setFarms] = useState<Farm[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [updatingId, setUpdatingId] = useState<number | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [error, setError] = useState("");
 
@@ -46,6 +47,20 @@ export default function FarmsPage() {
     }
   };
 
+  const handleUpdateFarm = async (id: number, payload: FarmPayload) => {
+    try {
+      setUpdatingId(id);
+      setError("");
+      await updateFarm(id, payload);
+      await loadFarms();
+    } catch (err) {
+      console.error(err);
+      setError("Could not update farm.");
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
   const handleDeleteFarm = async (id: number) => {
     try {
       setDeletingId(id);
@@ -62,10 +77,20 @@ export default function FarmsPage() {
 
   return (
     <div>
-      <FarmForm onSubmit={handleCreateFarm} submitting={submitting} />
-
       {error ? <p style={{ color: "crimson" }}>{error}</p> : null}
-      {loading ? <Loader /> : <FarmList farms={farms} deletingId={deletingId} onDelete={handleDeleteFarm} />}
+      {loading ? (
+        <Loader />
+      ) : farms.length === 0 ? (
+        <FarmForm onSubmit={handleCreateFarm} submitting={submitting} />
+      ) : (
+        <FarmList
+          farms={farms}
+          updatingId={updatingId}
+          deletingId={deletingId}
+          onUpdate={handleUpdateFarm}
+          onDelete={handleDeleteFarm}
+        />
+      )}
     </div>
   );
 }

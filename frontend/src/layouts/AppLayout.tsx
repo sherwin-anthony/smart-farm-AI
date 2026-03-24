@@ -5,7 +5,6 @@ import {
   Bot,
   CirclePlus,
   CloudSun,
-  Home,
   LayoutDashboard,
   Lightbulb,
   ListTodo,
@@ -21,7 +20,6 @@ import { useAuth } from "../features/auth/AuthContext";
 
 const links = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/farms", label: "Farms", icon: Home },
   { to: "/plots", label: "Plots", icon: Map },
   { to: "/crops", label: "Crops", icon: Sprout },
   { to: "/tasks", label: "Tasks", icon: ListTodo },

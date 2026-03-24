@@ -10,11 +10,8 @@ type FarmFormProps = {
 // Routing: used by FarmsPage, which is loaded by the /farms frontend route.
 export default function FarmForm({ onSubmit, submitting }: FarmFormProps) {
   const [form, setForm] = useState({
-    name: "",
     owner_name: "",
     location: "",
-    latitude: "",
-    longitude: "",
     size_hectares: "",
     notes: "",
   });
@@ -24,25 +21,25 @@ export default function FarmForm({ onSubmit, submitting }: FarmFormProps) {
     return Number(value);
   };
 
+  const buildFarmName = () => {
+    const ownerName = form.owner_name.trim();
+    return ownerName ? `${ownerName}'s Farm` : "My Farm";
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     await onSubmit({
-      name: form.name,
+      name: buildFarmName(),
       owner_name: form.owner_name || null,
       location: form.location || null,
-      latitude: parseNullableNumber(form.latitude),
-      longitude: parseNullableNumber(form.longitude),
       size_hectares: parseNullableNumber(form.size_hectares),
       notes: form.notes || null,
     });
 
     setForm({
-      name: "",
       owner_name: "",
       location: "",
-      latitude: "",
-      longitude: "",
       size_hectares: "",
       notes: "",
     });
@@ -60,15 +57,7 @@ export default function FarmForm({ onSubmit, submitting }: FarmFormProps) {
         marginBottom: "1rem",
       }}
     >
-      <h2 style={{ margin: 0 }}>Add Farm</h2>
-
-      <input
-        type="text"
-        placeholder="Farm name"
-        value={form.name}
-        onChange={(event) => setForm({ ...form, name: event.target.value })}
-        required
-      />
+      <h2 style={{ margin: 0 }}>CREATE YOUR FARM</h2>
 
       <input
         type="text"
@@ -82,22 +71,6 @@ export default function FarmForm({ onSubmit, submitting }: FarmFormProps) {
         placeholder="Location"
         value={form.location}
         onChange={(event) => setForm({ ...form, location: event.target.value })}
-      />
-
-      <input
-        type="number"
-        step="0.0000001"
-        placeholder="Latitude"
-        value={form.latitude}
-        onChange={(event) => setForm({ ...form, latitude: event.target.value })}
-      />
-
-      <input
-        type="number"
-        step="0.0000001"
-        placeholder="Longitude"
-        value={form.longitude}
-        onChange={(event) => setForm({ ...form, longitude: event.target.value })}
       />
 
       <input
@@ -116,7 +89,7 @@ export default function FarmForm({ onSubmit, submitting }: FarmFormProps) {
       />
 
       <button type="submit" disabled={submitting}>
-        {submitting ? "Saving..." : "Create Farm"}
+        {submitting ? "Saving..." : "Create"}
       </button>
     </form>
   );
