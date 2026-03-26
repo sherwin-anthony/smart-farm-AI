@@ -18,7 +18,7 @@ type AuthContextValue = {
   login: (payload: LoginPayload) => Promise<void>;
   register: (payload: RegisterPayload) => Promise<void>;
   logout: () => Promise<void>;
-  refreshAuth: () => Promise<void>;
+  refreshAuth: () => Promise<AuthUser | null>;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -41,9 +41,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } catch {
         setFarm(null);
       }
+
+      return currentUser;
     } catch {
       setUser(null);
       setFarm(null);
+      return null;
     } finally {
       setLoading(false);
     }
@@ -55,12 +58,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (payload: LoginPayload) => {
     await loginUser(payload);
-    await refreshAuth();
+    const currentUser = await refreshAuth();
+
+    if (!currentUser) {
+      throw new Error("Login succeeded but the session could not be restored.");
+    }
   };
 
   const register = async (payload: RegisterPayload) => {
     await registerUser(payload);
-    await refreshAuth();
+    const currentUser = await refreshAuth();
+
+    if (!currentUser) {
+      throw new Error("Registration succeeded but the session could not be restored.");
+    }
   };
 
   const logout = async () => {

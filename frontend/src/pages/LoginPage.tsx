@@ -31,6 +31,8 @@ export default function LoginPage() {
       console.error(err);
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message ?? "Login failed.");
+      } else if (err instanceof Error) {
+        setError(err.message);
       } else {
         setError("Login failed.");
       }

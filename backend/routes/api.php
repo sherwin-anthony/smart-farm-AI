@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Route;
 
 // Farm structure.
 Route::apiResource('farms', FarmController::class);
-Route::apiResource('plots', PlotController::class);
 
 // Crop monitoring.
 Route::apiResource('crops', CropController::class);
@@ -46,11 +45,14 @@ Route::middleware('web')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
 
     Route::middleware('auth:sanctum')->group(function () {
-    Route::post('logout', [AuthController::class, 'logout']);
-    Route::get('user', [AuthController::class, 'user']);
-    Route::put('user', [AuthController::class, 'updateUser']);
+        Route::post('logout', [AuthController::class, 'logout']);
+        Route::get('user', [AuthController::class, 'user']);
+        Route::put('user', [AuthController::class, 'updateUser']);
 
-    Route::get('farm', [CurrentFarmController::class, 'show']);
-    Route::put('farm', [CurrentFarmController::class, 'update']);
-});
+        Route::get('farm', [CurrentFarmController::class, 'show']);
+        Route::put('farm', [CurrentFarmController::class, 'update']);
+
+        // Plot records are private and always belong to the authenticated farm.
+        Route::apiResource('plots', PlotController::class);
+    });
 });

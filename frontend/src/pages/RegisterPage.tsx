@@ -35,6 +35,8 @@ export default function RegisterPage() {
       console.error(err);
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message ?? "Registration failed.");
+      } else if (err instanceof Error) {
+        setError(err.message);
       } else {
         setError("Registration failed.");
       }

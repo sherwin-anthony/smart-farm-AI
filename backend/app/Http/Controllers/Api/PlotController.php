@@ -3,20 +3,41 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Farm;
 use App\Models\Plot;
 use Illuminate\Http\Request;
 
+// Purpose: CRUD for plot records that belong to the authenticated user's farm.
+// Routing: /api/plots -> index/store/show/update/destroy
 class PlotController extends Controller
 {
-    public function index()
+    private function currentFarm(Request $request): Farm
     {
-        return response()->json(Plot::with('farm')->latest()->get());
+        $farm = $request->user()?->farms()->latest()->first();
+
+        if (!$farm) {
+            abort(422, 'No farm found. Complete your farm profile first.');
+        }
+
+        return $farm;
     }
 
+    // Route: GET /api/plots
+    public function index(Request $request)
+    {
+        $farm = $this->currentFarm($request);
+
+        return response()->json(
+            Plot::where('farm_id', $farm->id)->latest()->get()
+        );
+    }
+
+    // Route: POST /api/plots
     public function store(Request $request)
     {
+        $farm = $this->currentFarm($request);
+
         $data = $request->validate([
-            'farm_id' => ['required', 'exists:farms,id'],
             'name' => ['required', 'string', 'max:255'],
             'area_hectares' => ['nullable', 'numeric', 'min:0'],
             'soil_type' => ['nullable', 'string', 'max:255'],
@@ -24,22 +45,37 @@ class PlotController extends Controller
             'notes' => ['nullable', 'string'],
         ]);
 
-        $plot = Plot::create($data);
+        $plot = Plot::create([
+            'farm_id' => $farm->id,
+            'name' => $data['name'],
+            'area_hectares' => $data['area_hectares'] ?? null,
+            'soil_type' => $data['soil_type'] ?? null,
+            'status' => $data['status'] ?? 'active',
+            'notes' => $data['notes'] ?? null,
+        ]);
 
         return response()->json($plot, 201);
     }
 
-    public function show(string $id)
+    // Route: GET /api/plots/{plot}
+    public function show(Request $request, string $id)
     {
-        return response()->json(Plot::with('farm', 'crops')->findOrFail($id));
+        $farm = $this->currentFarm($request);
+
+        $plot = Plot::where('farm_id', $farm->id)
+            ->with('crops')
+            ->findOrFail($id);
+
+        return response()->json($plot);
     }
 
+    // Route: PUT /api/plots/{plot}
     public function update(Request $request, string $id)
     {
-        $plot = Plot::findOrFail($id);
+        $farm = $this->currentFarm($request);
+        $plot = Plot::where('farm_id', $farm->id)->findOrFail($id);
 
         $data = $request->validate([
-            'farm_id' => ['sometimes', 'required', 'exists:farms,id'],
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'area_hectares' => ['nullable', 'numeric', 'min:0'],
             'soil_type' => ['nullable', 'string', 'max:255'],
@@ -52,9 +88,11 @@ class PlotController extends Controller
         return response()->json($plot);
     }
 
-    public function destroy(string $id)
+    // Route: DELETE /api/plots/{plot}
+    public function destroy(Request $request, string $id)
     {
-        $plot = Plot::findOrFail($id);
+        $farm = $this->currentFarm($request);
+        $plot = Plot::where('farm_id', $farm->id)->findOrFail($id);
         $plot->delete();
 
         return response()->json(null, 204);

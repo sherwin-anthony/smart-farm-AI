@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BarChart3,
   Bell,
@@ -10,12 +10,15 @@ import {
   ListTodo,
   Mail,
   Map,
+  MoonStar,
   Search,
   Sprout,
+  SunMedium,
   UserRound,
 } from "lucide-react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../features/auth/AuthContext";
+import { applyTheme, getInitialTheme, persistTheme, type ThemeMode } from "../theme";
 
 const links = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -41,6 +44,12 @@ export default function AppLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [theme, setTheme] = useState<ThemeMode>(() => getInitialTheme());
+
+  useEffect(() => {
+    applyTheme(theme);
+    persistTheme(theme);
+  }, [theme]);
 
   const handleLogout = async () => {
     try {
@@ -51,6 +60,13 @@ export default function AppLayout() {
       console.error("Logout failed.", error);
     }
   };
+
+  const toggleTheme = () => {
+    setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark"));
+  };
+
+  const ThemeIcon = theme === "dark" ? SunMedium : MoonStar;
+  const themeLabel = theme === "dark" ? "Switch to light mode" : "Switch to dark mode";
 
   return (
     <div className="app-shell">
@@ -76,6 +92,16 @@ export default function AppLayout() {
           >
             <Bot size={20} strokeWidth={2.2} />
           </NavLink>
+
+          <button
+            type="button"
+            className="utility-icon utility-theme-toggle"
+            onClick={toggleTheme}
+            aria-label={themeLabel}
+            title={themeLabel}
+          >
+            <ThemeIcon size={18} strokeWidth={2.2} />
+          </button>
 
           <div className="topbar-link-slot">
             {/* Top navbar links can be added here next. */}

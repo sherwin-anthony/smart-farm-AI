@@ -1,5 +1,7 @@
 import axios from "axios";
+import { Settings2, UserRound } from "lucide-react";
 import { useEffect, useState } from "react";
+import PageHeader from "../components/ui/PageHeader";
 import { useAuth } from "../features/auth/AuthContext";
 import { updateCurrentUser } from "../features/auth/api";
 import { updateCurrentFarm } from "../features/farms/api";
@@ -84,6 +86,11 @@ export default function FarmProfilePage() {
 
   return (
     <div className="stack">
+      <PageHeader
+        title="Profile"
+        description="Update account and farm details inside the refreshed malachite theme with cleaner cards and higher-contrast text."
+      />
+
       {!user ? (
         <section className="panel-card">
           <p>No user details found for this account.</p>
@@ -91,8 +98,13 @@ export default function FarmProfilePage() {
       ) : (
         <section className="profile-card">
           <form onSubmit={handleSubmit} className="profile-form">
-            <div className="row">
-              <p className="helper-text">Account Details</p>
+            <div className="row field-card">
+              <div className="inline-icon-row">
+                <span className="card-icon card-icon-soft">
+                  <UserRound size={18} strokeWidth={2.2} />
+                </span>
+                <p className="helper-text">Account Details</p>
+              </div>
             </div>
 
             <div className="row">
@@ -119,8 +131,13 @@ export default function FarmProfilePage() {
               />
             </div>
 
-            <div className="row">
-              <p className="helper-text">Farm Details</p>
+            <div className="row field-card">
+              <div className="inline-icon-row">
+                <span className="card-icon card-icon-soft">
+                  <Settings2 size={18} strokeWidth={2.2} />
+                </span>
+                <p className="helper-text">Farm Details</p>
+              </div>
             </div>
 
             <div className="row">
