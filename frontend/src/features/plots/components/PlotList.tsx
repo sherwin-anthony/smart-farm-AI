@@ -7,7 +7,8 @@ import {
   Sprout,
   Trash2,
   Wrench,
-  X,
+  X
+  ,
 } from "lucide-react";
 import { useState } from "react";
 import { PLOT_STATUS_OPTIONS, SOIL_TYPE_OPTIONS } from "../options";
@@ -266,11 +267,11 @@ export default function PlotList({
                 <>
                   <button
                     type="button"
-                    className={secondaryButtonClassName}
+                    className={primaryButtonClassName}
                     onClick={() => setSelectedPlot(plot)}
                   >
                     <Eye size={16} strokeWidth={2.2} />
-                    View Details
+                    Details
                   </button>
                   <button type="button" className={primaryButtonClassName} onClick={() => startEdit(plot)}>
                     <PenSquare size={16} strokeWidth={2.2} />

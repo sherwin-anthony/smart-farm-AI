@@ -17,26 +17,9 @@ use Illuminate\Support\Facades\Route;
 // Farm structure.
 Route::apiResource('farms', FarmController::class);
 
-// Crop monitoring.
-Route::apiResource('crops', CropController::class);
-
-// Smart task scheduler.
-Route::apiResource('tasks', TaskController::class);
-
-// Dashboard analytics.
-Route::get('dashboard/overview', [DashboardController::class, 'overview']);
-
 // Weather and recommendations.
 Route::get('weather/forecast', [WeatherController::class, 'index']);
 Route::post('weather/sync', [WeatherController::class, 'sync']);
-Route::get('recommendations', [RecommendationController::class, 'index']);
-
-// Yield prediction.
-Route::get('yield-predictions', [YieldPredictionController::class, 'index']);
-Route::post('yield-predictions', [YieldPredictionController::class, 'store']);
-
-// AI assistant chat.
-Route::post('assistant/chat', [AssistantController::class, 'chat']);
 
 // Authentication + current user/farm session routes.
 // These stay under /api/... but also need web middleware for session support.
@@ -54,5 +37,18 @@ Route::middleware('web')->group(function () {
 
         // Plot records are private and always belong to the authenticated farm.
         Route::apiResource('plots', PlotController::class);
+
+        // Crop records are private and always belong to the authenticated farm through their plots.
+        Route::apiResource('crops', CropController::class);
+
+        // Connected crop modules use the same authenticated farm context as crops.
+        Route::apiResource('tasks', TaskController::class);
+        Route::get('dashboard/overview', [DashboardController::class, 'overview']);
+        Route::get('recommendations', [RecommendationController::class, 'index']);
+        Route::get('yield-predictions', [YieldPredictionController::class, 'index']);
+        Route::post('yield-predictions', [YieldPredictionController::class, 'store']);
+
+        // Assistant answers are crop-aware and scoped to the authenticated farm.
+        Route::post('assistant/chat', [AssistantController::class, 'chat']);
     });
 });

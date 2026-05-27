@@ -1,9 +1,9 @@
-export type AssistantChatPayload = {
-  message: string;
-  farm_id?: number | null;
-};
-
-export type AssistantChatResponse = {
-  reply: string;
-  context_used?: Record<string, unknown>;
-};
+// Purpose: assistant messages use the authenticated farm context on the backend.
+export type AssistantChatPayload = {
+  message: string;
+};
+
+export type AssistantChatResponse = {
+  reply: string;
+  context_used?: Record<string, unknown>;
+};

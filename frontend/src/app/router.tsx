@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import AppLayout from "../layouts/AppLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import AssistantPage from "../pages/AssistantPage";
+import CropDetailPage from "../pages/CropDetailPage";
 import CropsPage from "../pages/CropsPage";
 import DashboardPage from "../pages/DashboardPage";
 import FarmProfilePage from "../pages/FarmProfilePage";
@@ -31,6 +32,7 @@ export const router = createBrowserRouter([
           { path: "farm-profile", element: <FarmProfilePage /> },
           { path: "plots", element: <PlotsPage /> },
           { path: "crops", element: <CropsPage /> },
+          { path: "crops/:id", element: <CropDetailPage /> },
           { path: "tasks", element: <TasksPage /> },
           { path: "weather", element: <WeatherPage /> },
           { path: "recommendations", element: <RecommendationsPage /> },

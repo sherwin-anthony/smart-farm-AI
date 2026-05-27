@@ -29,6 +29,12 @@ class Farm extends Model
         return $this->hasMany(Plot::class);
     }
 
+    public function crops()
+    {
+        // Crops belong to a farm through plots, so this gives connected modules a stable farm-level entry point.
+        return $this->hasManyThrough(Crop::class, Plot::class);
+    }
+
     public function weatherForecasts()
     {
         return $this->hasMany(WeatherForecast::class);

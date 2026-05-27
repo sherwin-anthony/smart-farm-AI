@@ -1,35 +1,97 @@
-import { CheckCircle2, ClipboardList, TimerReset, Zap } from "lucide-react";
-import ModulePreviewPage from "../components/ui/ModulePreviewPage";
+import axios from "axios";
+import { ClipboardList } from "lucide-react";
+import { useEffect, useState } from "react";
+import EmptyState from "../components/ui/EmptyState";
+import Loader from "../components/ui/Loader";
+import PageHeader from "../components/ui/PageHeader";
+import { listTasks, updateTask } from "../features/tasks/api";
+import TaskList from "../features/tasks/components/TaskList";
+import type { Task } from "../features/tasks/types";
 
+const getErrorMessage = (value: unknown, fallback: string) => {
+  // Normalize API errors so backend validation messages can surface in the UI.
+  if (axios.isAxiosError(value)) {
+    return value.response?.data?.message ?? fallback;
+  }
+
+  return fallback;
+};
+
+// Purpose: real task board for crop-generated and manual farm work.
 export default function TasksPage() {
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [completingId, setCompletingId] = useState<number | null>(null);
+
+  const loadTasks = async () => {
+    try {
+      setLoading(true);
+      setError("");
+      setTasks(await listTasks());
+    } catch (loadError) {
+      console.error(loadError);
+      setError(getErrorMessage(loadError, "Could not load tasks."));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadTasks();
+  }, []);
+
+  const handleComplete = async (task: Task) => {
+    try {
+      setCompletingId(task.id);
+      setError("");
+      await updateTask(task.id, {
+        status: "completed",
+        completed_at: new Date().toISOString(),
+      });
+      await loadTasks();
+    } catch (completeError) {
+      console.error(completeError);
+      setError(getErrorMessage(completeError, "Could not complete task."));
+    } finally {
+      setCompletingId(null);
+    }
+  };
+
   return (
-    <ModulePreviewPage
-      title="Tasks"
-      description="Task cards now match the rest of the system with expressive icons, stronger hover states, and simplified text contrast."
-      heroTitle="Turn field work into a crisp daily board"
-      heroDescription="The task experience is set up for routines, deadlines, and quick status reviews with the same card language used everywhere else."
-      heroIcon={ClipboardList}
-      heroBadge="Operations flow"
-      heroAction="Create routine"
-      cards={[
-        {
-          title: "Priority queues",
-          description: "Group irrigation, fertilizing, and harvesting work into sections that feel active without becoming cluttered.",
-          icon: Zap,
-          strong: true,
-          badge: "High focus",
-        },
-        {
-          title: "Completion tracking",
-          description: "Use black-and-white text on mint surfaces so every action remains readable at a glance.",
-          icon: CheckCircle2,
-        },
-        {
-          title: "Time windows",
-          description: "Keep schedules, reminders, and follow-up work visible inside lifted cards with softer motion.",
-          icon: TimerReset,
-        },
-      ]}
-    />
+    <div className="stack">
+      <PageHeader
+        title="Tasks"
+        description="Review crop work, auto-generated reminders, and field actions that need attention."
+      />
+
+      <section className="module-hero">
+        <div className="module-hero-copy">
+          <span className="card-chip">Crop operations</span>
+          <span className="card-icon">
+            <ClipboardList size={24} strokeWidth={2.2} />
+          </span>
+          <div>
+            <h2>Daily work generated from your crops</h2>
+            <p>
+              New crop records can now create monitoring, watering, fertilizer, and harvest tasks automatically.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {error ? <p className="text-danger">{error}</p> : null}
+
+      {loading ? (
+        <Loader />
+      ) : tasks.length === 0 ? (
+        <EmptyState
+          title="No tasks yet"
+          description="Create a crop to generate starter tasks, or add manual task creation in the next operations pass."
+        />
+      ) : (
+        <TaskList tasks={tasks} completingId={completingId} onComplete={handleComplete} />
+      )}
+    </div>
   );
 }

@@ -10,15 +10,23 @@ use Illuminate\Http\Request;
 
 class RecommendationController extends Controller
 {
+    private function currentFarm(Request $request): Farm
+    {
+        $farm = $request->user()?->farms()->latest()->first();
+
+        if (!$farm) {
+            abort(422, 'No farm found. Complete your farm profile first.');
+        }
+
+        return $farm;
+    }
+
     public function index(Request $request, FarmingRecommendationService $service)
     {
-        $request->validate([
-            'farm_id' => ['required', 'exists:farms,id'],
-        ]);
-
-        $farm = Farm::findOrFail($request->farm_id);
+        $farm = $this->currentFarm($request);
         $forecast = WeatherForecast::where('farm_id', $farm->id)->latest('forecast_date')->first();
 
+        // Recommendations now use the authenticated farm context instead of trusting a request farm_id.
         return response()->json([
             'recommendations' => $service->build($farm, $forecast),
         ]);

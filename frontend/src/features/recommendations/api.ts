@@ -1,8 +1,7 @@
-import { api } from "../../api/client";
-
-export const getRecommendations = async (farmId: number) => {
-  const response = await api.get<{ recommendations: string[] }>("/recommendations", {
-    params: { farm_id: farmId },
-  });
-  return response.data;
-};
+import { api } from "../../api/client";
+
+export const getRecommendations = async () => {
+  // Backend derives the farm from the authenticated session, so no farm_id is sent.
+  const response = await api.get<{ recommendations: string[] }>("/recommendations");
+  return response.data;
+};

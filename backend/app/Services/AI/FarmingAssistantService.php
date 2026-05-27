@@ -6,10 +6,12 @@ class FarmingAssistantService
 {
     public function reply(string $message, array $context = []): array
     {
-        // Start with a placeholder so the structure exists before OpenAI wiring.
-        // Later this method can call OpenAI with farm, crop, weather, and task context.
+        $cropCount = count($context['crops'] ?? []);
+        $pendingTaskCount = count($context['pending_tasks'] ?? []);
+
+        // This local reply keeps the assistant crop-aware before the external OpenAI call is wired.
         return [
-            'reply' => 'Assistant service placeholder. Wire OpenAI here next.',
+            'reply' => "I can see {$cropCount} crop" . ($cropCount === 1 ? '' : 's') . " and {$pendingTaskCount} pending task" . ($pendingTaskCount === 1 ? '' : 's') . ". Based on your message: {$message}",
             'context_used' => $context,
         ];
     }

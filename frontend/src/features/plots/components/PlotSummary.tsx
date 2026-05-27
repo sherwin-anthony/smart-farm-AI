@@ -3,7 +3,7 @@ import {
   MapPinned,
   Ruler,
   ShieldAlert,
-  Sprout,
+  Leaf,
 } from "lucide-react";
 import type { Plot } from "../types";
 
@@ -37,8 +37,8 @@ export default function PlotSummary({ plots }: PlotSummaryProps) {
       label: "Active plots",
       value: activePlots,
       copy: "Currently supporting active work",
-      icon: Sprout,
-      strong: true,
+      icon: Leaf,
+      strong:false,
     },
     {
       label: "Vacant plots",
@@ -54,7 +54,7 @@ export default function PlotSummary({ plots }: PlotSummaryProps) {
     },
     {
       label: "Total area",
-      value: `${totalArea.toFixed(2)} ha`,
+      value: `${totalArea.toFixed(2)} hectare`,
       copy: "Combined field size on record",
       icon: Ruler,
     },
