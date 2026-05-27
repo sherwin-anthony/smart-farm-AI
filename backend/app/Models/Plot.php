@@ -33,4 +33,9 @@ class Plot extends Model
     {
         return $this->hasMany(Task::class);
     }
+
+    public function yieldPredictions()
+    {
+        return $this->hasMany(YieldPrediction::class);
+    }
 }

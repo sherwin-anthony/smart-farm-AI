@@ -47,8 +47,8 @@ Route::middleware('web')->group(function () {
         Route::get('dashboard/overview', [DashboardController::class, 'overview']);
         Route::get('recommendations', [RecommendationController::class, 'index']);
         Route::post('recommendations/tasks', [RecommendationController::class, 'createTask']);
-        Route::get('yield-predictions', [YieldPredictionController::class, 'index']);
-        Route::post('yield-predictions', [YieldPredictionController::class, 'store']);
+        Route::post('yield-predictions/{yieldPrediction}/record-actual', [YieldPredictionController::class, 'recordActual']);
+        Route::apiResource('yield-predictions', YieldPredictionController::class);
 
         // Assistant answers are crop-aware and scoped to the authenticated farm.
         Route::post('assistant/chat', [AssistantController::class, 'chat']);

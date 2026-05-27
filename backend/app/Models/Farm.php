@@ -44,6 +44,12 @@ class Farm extends Model
     {
         return $this->hasMany(WeatherForecast::class);
     }
+
+    public function yieldPredictions()
+    {
+        return $this->hasMany(YieldPrediction::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
