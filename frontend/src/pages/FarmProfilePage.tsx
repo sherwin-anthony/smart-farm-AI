@@ -5,6 +5,7 @@ import PageHeader from "../components/ui/PageHeader";
 import { useAuth } from "../features/auth/AuthContext";
 import { updateCurrentUser } from "../features/auth/api";
 import { updateCurrentFarm } from "../features/farms/api";
+import FarmLocationPicker from "../features/farms/components/FarmLocationPicker";
 
 export default function FarmProfilePage() {
   const { user, farm, refreshAuth } = useAuth();
@@ -13,6 +14,8 @@ export default function FarmProfilePage() {
     name: "",
     email: "",
     location: "",
+    latitude: "",
+    longitude: "",
     size_hectares: "",
     notes: "",
   });
@@ -27,6 +30,8 @@ export default function FarmProfilePage() {
         name: user.name ?? "",
         email: user.email ?? "",
         location: farm?.location ?? "",
+        latitude: farm?.latitude?.toString() ?? "",
+        longitude: farm?.longitude?.toString() ?? "",
         size_hectares: farm?.size_hectares?.toString() ?? "",
         notes: farm?.notes ?? "",
       });
@@ -43,6 +48,8 @@ export default function FarmProfilePage() {
     const hasFarmDetails =
       Boolean(farm) ||
       Boolean(form.location.trim()) ||
+      Boolean(form.latitude.trim()) ||
+      Boolean(form.longitude.trim()) ||
       Boolean(form.size_hectares.trim()) ||
       Boolean(form.notes.trim());
 
@@ -62,6 +69,8 @@ export default function FarmProfilePage() {
         requests.push(
           updateCurrentFarm({
             location: form.location || null,
+            latitude: form.latitude.trim() ? Number(form.latitude) : null,
+            longitude: form.longitude.trim() ? Number(form.longitude) : null,
             size_hectares: form.size_hectares.trim() ? Number(form.size_hectares) : null,
             notes: form.notes || null,
           })
@@ -150,6 +159,20 @@ export default function FarmProfilePage() {
                 onChange={(event) => setForm({ ...form, location: event.target.value })}
               />
             </div>
+
+            <FarmLocationPicker
+              location={form.location}
+              latitude={form.latitude.trim() ? Number(form.latitude) : null}
+              longitude={form.longitude.trim() ? Number(form.longitude) : null}
+              onChange={(nextLocation) =>
+                setForm({
+                  ...form,
+                  latitude: nextLocation.latitude.toString(),
+                  longitude: nextLocation.longitude.toString(),
+                  location: nextLocation.location ?? form.location,
+                })
+              }
+            />
 
             <div className="row">
               <label htmlFor="farm-size">Size in Hectares</label>

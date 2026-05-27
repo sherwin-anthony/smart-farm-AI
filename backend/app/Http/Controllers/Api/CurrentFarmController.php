@@ -33,6 +33,8 @@ class CurrentFarmController extends Controller
     {
         $data = $request->validate([
             'location' => ['nullable', 'string', 'max:255'],
+            'latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude' => ['nullable', 'numeric', 'between:-180,180'],
             'size_hectares' => ['nullable', 'numeric', 'min:0'],
             'notes' => ['nullable', 'string'],
         ]);
@@ -49,6 +51,8 @@ class CurrentFarmController extends Controller
             'name' => "{$request->user()->name}'s Farm",
             'owner_name' => $request->user()->name,
             'location' => $data['location'] ?? null,
+            'latitude' => $data['latitude'] ?? null,
+            'longitude' => $data['longitude'] ?? null,
             'size_hectares' => $data['size_hectares'] ?? null,
             'notes' => $data['notes'] ?? null,
         ]);

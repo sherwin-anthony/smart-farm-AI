@@ -3,6 +3,7 @@ import {
   BarChart3,
   Bot,
   CheckCircle2,
+  CloudSun,
   ClipboardList,
   Leaf,
   Sparkles,
@@ -75,6 +76,12 @@ export default function DashboardPage() {
           note: "Crop tasks still waiting for action.",
           icon: ClipboardList,
         },
+        {
+          label: "Weather risks",
+          value: overview.weather.impact_count.toString(),
+          note: overview.weather.headline,
+          icon: CloudSun,
+        },
       ]
     : [];
 
@@ -99,7 +106,7 @@ export default function DashboardPage() {
               <div>
                 <h2>Your crop system is connected</h2>
                 <p>
-                  Crops, tasks, and yield predictions now feed this overview from the backend.
+                  Crops, tasks, weather, and yield predictions feed this overview from the backend.
                 </p>
               </div>
             </div>
@@ -141,6 +148,24 @@ export default function DashboardPage() {
                   ? "A recent yield prediction is available in the yield module."
                   : "No yield prediction has been saved yet."}
               </p>
+            </article>
+
+            <article
+              className={
+                overview.weather.impact_count > 0
+                  ? "feature-card feature-card-strong"
+                  : "feature-card"
+              }
+            >
+              <span
+                className={
+                  overview.weather.impact_count > 0 ? "card-icon" : "card-icon card-icon-soft"
+                }
+              >
+                <CloudSun size={18} strokeWidth={2.2} />
+              </span>
+              <h3 className="card-title">Weather Signal</h3>
+              <p className="card-copy">{overview.weather.action}</p>
             </article>
           </section>
         </>

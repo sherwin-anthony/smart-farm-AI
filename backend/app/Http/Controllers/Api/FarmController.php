@@ -30,8 +30,8 @@ class FarmController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'owner_name' => ['nullable', 'string', 'max:255'],
             'location' => ['nullable', 'string', 'max:255'],
-            'latitude' => ['nullable', 'numeric'],
-            'longitude' => ['nullable', 'numeric'],
+            'latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude' => ['nullable', 'numeric', 'between:-180,180'],
             'size_hectares' => ['nullable', 'numeric', 'min:0'],
             'notes' => ['nullable', 'string'],
         ]);
@@ -60,8 +60,8 @@ class FarmController extends Controller
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'owner_name' => ['nullable', 'string', 'max:255'],
             'location' => ['nullable', 'string', 'max:255'],
-            'latitude' => ['nullable', 'numeric'],
-            'longitude' => ['nullable', 'numeric'],
+            'latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude' => ['nullable', 'numeric', 'between:-180,180'],
             'size_hectares' => ['nullable', 'numeric', 'min:0'],
             'notes' => ['nullable', 'string'],
         ]);

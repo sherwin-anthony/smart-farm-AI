@@ -17,10 +17,6 @@ use Illuminate\Support\Facades\Route;
 // Farm structure.
 Route::apiResource('farms', FarmController::class);
 
-// Weather and recommendations.
-Route::get('weather/forecast', [WeatherController::class, 'index']);
-Route::post('weather/sync', [WeatherController::class, 'sync']);
-
 // Authentication + current user/farm session routes.
 // These stay under /api/... but also need web middleware for session support.
 Route::middleware('web')->group(function () {
@@ -35,6 +31,11 @@ Route::middleware('web')->group(function () {
         Route::get('farm', [CurrentFarmController::class, 'show']);
         Route::put('farm', [CurrentFarmController::class, 'update']);
 
+        // Weather data is derived from the authenticated farm's saved coordinates.
+        Route::get('weather/forecast', [WeatherController::class, 'index']);
+        Route::post('weather/sync', [WeatherController::class, 'sync']);
+        Route::post('weather/tasks', [WeatherController::class, 'createTasks']);
+
         // Plot records are private and always belong to the authenticated farm.
         Route::apiResource('plots', PlotController::class);
 
@@ -45,6 +46,7 @@ Route::middleware('web')->group(function () {
         Route::apiResource('tasks', TaskController::class);
         Route::get('dashboard/overview', [DashboardController::class, 'overview']);
         Route::get('recommendations', [RecommendationController::class, 'index']);
+        Route::post('recommendations/tasks', [RecommendationController::class, 'createTask']);
         Route::get('yield-predictions', [YieldPredictionController::class, 'index']);
         Route::post('yield-predictions', [YieldPredictionController::class, 'store']);
 

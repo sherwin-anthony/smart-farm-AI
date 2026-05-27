@@ -9,6 +9,7 @@ import {
   TimerReset,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import EmptyState from "../components/ui/EmptyState";
 import Loader from "../components/ui/Loader";
 import PageHeader from "../components/ui/PageHeader";
@@ -107,6 +108,8 @@ const sortTasks = (tasks: Task[]) => {
 
 // Purpose: execution layer for farm-wide, plot-specific, and crop-specific tasks.
 export default function TasksPage() {
+  const [searchParams] = useSearchParams();
+  const initialSource = searchParams.get("source") ?? "all";
   const [tasks, setTasks] = useState<Task[]>([]);
   const [plots, setPlots] = useState<Plot[]>([]);
   const [crops, setCrops] = useState<Crop[]>([]);
@@ -120,7 +123,9 @@ export default function TasksPage() {
   const [filters, setFilters] = useState<TaskFilters>({
     status: "all",
     priority: "all",
-    source: "all",
+    source: TASK_SOURCE_OPTIONS.some((option) => option.value === initialSource)
+      ? initialSource
+      : "all",
     plot_id: "all",
     crop_id: "all",
     due: "all",
