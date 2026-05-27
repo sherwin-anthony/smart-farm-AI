@@ -35,8 +35,11 @@ class CropModuleTest extends TestCase
         // The crop module should immediately create operational tasks for the new crop.
         $this->assertSame(6, Task::where('crop_id', $crop->id)->count());
         $this->assertDatabaseHas('tasks', [
+            'farm_id' => $farm->id,
+            'plot_id' => $plot->id,
             'crop_id' => $crop->id,
             'title' => 'Harvest readiness check',
+            'priority' => 'medium',
             'source' => 'auto_crop',
         ]);
     }

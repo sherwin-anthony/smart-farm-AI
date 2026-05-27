@@ -56,29 +56,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     refreshAuth();
   }, [refreshAuth]);
 
-  const login = async (payload: LoginPayload) => {
+  const login = useCallback(async (payload: LoginPayload) => {
     await loginUser(payload);
     const currentUser = await refreshAuth();
 
     if (!currentUser) {
       throw new Error("Login succeeded but the session could not be restored.");
     }
-  };
+  }, [refreshAuth]);
 
-  const register = async (payload: RegisterPayload) => {
+  const register = useCallback(async (payload: RegisterPayload) => {
     await registerUser(payload);
     const currentUser = await refreshAuth();
 
     if (!currentUser) {
       throw new Error("Registration succeeded but the session could not be restored.");
     }
-  };
+  }, [refreshAuth]);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     await logoutUser();
     setUser(null);
     setFarm(null);
-  };
+  }, []);
 
   const value = useMemo(
     () => ({
@@ -90,13 +90,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       logout,
       refreshAuth,
     }),
-    [user, farm, loading, refreshAuth]
+    [user, farm, loading, login, register, logout, refreshAuth]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 // Purpose: hook for using auth state in pages/components.
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const context = useContext(AuthContext);
 

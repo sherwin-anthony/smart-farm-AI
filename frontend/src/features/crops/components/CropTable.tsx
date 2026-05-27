@@ -130,8 +130,7 @@ const getNextTask = (crop: Crop, tasks: Task[]) => {
   // The next-task preview answers "what should happen next?" directly on each crop card.
   return tasks
     .filter((task) => task.crop_id === crop.id && task.status !== "completed")
-    .sort((first, second) => (first.due_on ?? "").localeCompare(second.due_on ?? ""))
-    [0];
+    .sort((first, second) => (first.due_on ?? "").localeCompare(second.due_on ?? ""))[0];
 };
 
 // Purpose: render crop records as operational cards for the authenticated farm workspace.

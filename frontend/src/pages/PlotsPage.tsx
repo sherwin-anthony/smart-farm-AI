@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { MapPlus } from "lucide-react";
 import EmptyState from "../components/ui/EmptyState";
 import Loader from "../components/ui/Loader";
@@ -26,15 +26,15 @@ export default function PlotsPage() {
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [error, setError] = useState("");
 
-  const getErrorMessage = (value: unknown, fallback: string) => {
+  const getErrorMessage = useCallback((value: unknown, fallback: string) => {
     if (axios.isAxiosError(value)) {
       return value.response?.data?.message ?? fallback;
     }
 
     return fallback;
-  };
+  }, []);
 
-  const loadPlots = async () => {
+  const loadPlots = useCallback(async () => {
     try {
       setLoading(true);
       setError("");
@@ -46,11 +46,11 @@ export default function PlotsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [getErrorMessage]);
 
   useEffect(() => {
     loadPlots();
-  }, []);
+  }, [loadPlots]);
 
   const handleCreate = async (payload: PlotPayload) => {
     try {

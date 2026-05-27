@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Sprout } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import EmptyState from "../components/ui/EmptyState";
 import Loader from "../components/ui/Loader";
 import PageHeader from "../components/ui/PageHeader";
@@ -34,16 +34,16 @@ export default function CropsPage() {
   const [error, setError] = useState("");
   const [loadFailed, setLoadFailed] = useState(false);
 
-  const getErrorMessage = (value: unknown, fallback: string) => {
+  const getErrorMessage = useCallback((value: unknown, fallback: string) => {
     // Normalize axios failures so the page can show backend messages when available.
     if (axios.isAxiosError(value)) {
       return value.response?.data?.message ?? fallback;
     }
 
     return fallback;
-  };
+  }, []);
 
-  const loadCropWorkspace = async () => {
+  const loadCropWorkspace = useCallback(async () => {
     try {
       setLoading(true);
       setError("");
@@ -66,11 +66,11 @@ export default function CropsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [getErrorMessage]);
 
   useEffect(() => {
     loadCropWorkspace();
-  }, []);
+  }, [loadCropWorkspace]);
 
   const handleCreate = async (payload: CropPayload) => {
     try {

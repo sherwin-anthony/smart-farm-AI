@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Farm;
+use App\Models\Task;
 use App\Services\AI\FarmingAssistantService;
 use Illuminate\Http\Request;
 
@@ -41,15 +42,18 @@ class AssistantController extends Controller
             ])
             ->values();
 
-        $pendingTasks = $farm->crops()
-            ->with(['tasks' => fn ($query) => $query->where('status', 'pending')->orderBy('due_on')])
+        $pendingTasks = Task::with(['crop', 'plot'])
+            ->where('farm_id', $farm->id)
+            ->where('status', 'pending')
+            ->orderBy('due_on')
+            ->take(8)
             ->get()
-            ->flatMap(fn ($crop) => $crop->tasks->map(fn ($task) => [
-                'crop' => $crop->name,
+            ->map(fn ($task) => [
+                'crop' => $task->crop?->name,
+                'plot' => $task->plot?->name,
                 'title' => $task->title,
                 'due_on' => $task->due_on,
-            ]))
-            ->take(8)
+            ])
             ->values();
 
         // Assistant context is derived from the authenticated farm, never from a request farm_id.

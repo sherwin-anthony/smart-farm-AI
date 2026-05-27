@@ -1,5 +1,5 @@
 import { PenSquare, Sprout, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { Plot } from "../../plots/types";
 import {
   CROP_GROWTH_STAGE_OPTIONS,
@@ -57,22 +57,13 @@ export default function CropForm({
 
   const [form, setForm] = useState(createInitialForm);
 
-  useEffect(() => {
-    // Keep the plot selector usable when the available plot list changes before submit.
-    if (!form.plot_id && plots[0]) {
-      setForm((currentForm) => ({
-        ...currentForm,
-        plot_id: plots[0].id.toString(),
-      }));
-    }
-  }, [form.plot_id, plots]);
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const plotId = form.plot_id || plots[0]?.id.toString() || "";
 
     // Normalize optional inputs to null so the backend receives a clean crop payload.
     await onSubmit({
-      plot_id: Number(form.plot_id),
+      plot_id: Number(plotId),
       name: form.name.trim(),
       type: form.type.trim() ? form.type.trim() : null,
       variety: form.variety.trim() ? form.variety.trim() : null,
@@ -115,7 +106,7 @@ export default function CropForm({
           <select
             className={fieldClassName}
             id="crop-plot"
-            value={form.plot_id}
+            value={form.plot_id || plots[0]?.id.toString() || ""}
             onChange={(event) => setForm({ ...form, plot_id: event.target.value })}
             required
           >

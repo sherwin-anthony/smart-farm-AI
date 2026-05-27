@@ -10,6 +10,7 @@ class CropTaskGenerator
 {
     public function generateForNewCrop(Crop $crop): void
     {
+        $plot = $crop->plot;
         $anchorDate = $crop->planted_on
             ? Carbon::parse($crop->planted_on)
             : now();
@@ -64,11 +65,14 @@ class CropTaskGenerator
             // firstOrCreate keeps auto-generated tasks idempotent if this service is called again later.
             Task::firstOrCreate(
                 [
+                    'farm_id' => $plot?->farm_id,
+                    'plot_id' => $crop->plot_id,
                     'crop_id' => $crop->id,
                     'source' => 'auto_crop',
                     'title' => $task['title'],
                 ],
                 [
+                    'priority' => 'medium',
                     'task_type' => $task['task_type'],
                     'due_on' => $task['due_on']->toDateString(),
                     'status' => 'pending',

@@ -35,6 +35,11 @@ class Farm extends Model
         return $this->hasManyThrough(Crop::class, Plot::class);
     }
 
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
     public function weatherForecasts()
     {
         return $this->hasMany(WeatherForecast::class);

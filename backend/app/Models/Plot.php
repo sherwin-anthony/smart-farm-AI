@@ -28,4 +28,9 @@ class Plot extends Model
     {
         return $this->hasMany(Crop::class);
     }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
 }

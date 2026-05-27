@@ -32,9 +32,7 @@ class DashboardController extends Controller
             'total_crops' => (clone $cropQuery)->count(),
             'active_crops' => (clone $cropQuery)->where('status', 'growing')->count(),
             'ready_to_harvest' => (clone $cropQuery)->where('status', 'ready')->count(),
-            'pending_tasks' => Task::whereHas('crop', fn ($query) => $query->forFarm($farm))
-                ->where('status', 'pending')
-                ->count(),
+            'pending_tasks' => Task::where('farm_id', $farm->id)->where('status', 'pending')->count(),
             'latest_prediction' => YieldPrediction::where('farm_id', $farm->id)->latest()->first(),
         ]);
     }
