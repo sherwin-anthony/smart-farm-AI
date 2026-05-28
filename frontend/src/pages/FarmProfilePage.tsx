@@ -97,7 +97,7 @@ export default function FarmProfilePage() {
     <div className="stack">
       <PageHeader
         title="Profile"
-        description="Update account and farm details inside the refreshed malachite theme with cleaner cards and higher-contrast text."
+        description="Update account details, farm profile, and the exact map location used by weather sync."
       />
 
       {!user ? (

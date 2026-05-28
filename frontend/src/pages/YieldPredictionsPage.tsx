@@ -42,10 +42,10 @@ const fieldClassName =
   "w-full rounded-2xl border border-surface-border bg-surface-card px-4 py-3 text-sm text-ink shadow-sm";
 
 const statusClass: Record<string, string> = {
-  predicted: "border-sky-200 bg-sky-50 text-sky-700",
-  updated: "border-amber-200 bg-amber-50 text-amber-700",
-  harvested: "border-emerald-200 bg-emerald-50 text-emerald-700",
-  cancelled: "border-slate-200 bg-slate-50 text-slate-600",
+  predicted: "tone-info",
+  updated: "tone-warning",
+  harvested: "tone-success",
+  cancelled: "tone-muted",
 };
 
 const getErrorMessage = (value: unknown, fallback: string) => {
@@ -116,8 +116,8 @@ const recordDifference = (prediction: YieldPrediction) => {
     Icon: difference >= 0 ? TrendingUp : TrendingDown,
     className:
       difference >= 0
-        ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-        : "border-amber-200 bg-amber-50 text-amber-700",
+        ? "tone-success"
+        : "tone-warning",
   };
 };
 
@@ -664,7 +664,7 @@ export default function YieldPredictionsPage() {
                 <div className="mt-4 flex justify-end">
                   <button
                     type="button"
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-700 shadow-none transition hover:-translate-y-0.5 disabled:cursor-progress disabled:opacity-70"
+                    className="tone-danger inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-semibold shadow-none transition hover:-translate-y-0.5 disabled:cursor-progress disabled:opacity-70"
                     disabled={deletingId === prediction.id}
                     onClick={() => handleDelete(prediction)}
                   >

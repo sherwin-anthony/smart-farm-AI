@@ -23,9 +23,9 @@ type WeatherImpactPanelProps = {
 };
 
 const severityClass: Record<WeatherImpactSeverity, string> = {
-  high: "border-red-200 bg-red-50 text-red-700",
-  medium: "border-amber-200 bg-amber-50 text-amber-700",
-  low: "border-emerald-200 bg-emerald-50 text-emerald-700",
+  high: "tone-danger",
+  medium: "tone-warning",
+  low: "tone-success",
 };
 
 const formatDate = (value: string | null) => {
@@ -119,7 +119,7 @@ export default function WeatherImpactPanel({
 
           return (
             <article key={impact.key} className="preview-card interactive-lift rounded-3xl p-5">
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="flex items-start gap-3">
                   <span className="card-icon card-icon-soft">
                     <ImpactIcon size={18} strokeWidth={2.2} />

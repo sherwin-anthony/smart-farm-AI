@@ -31,7 +31,7 @@ export default function WeatherForecastList({ forecasts }: WeatherForecastListPr
 
         return (
           <article key={forecast.id} className="preview-card interactive-lift rounded-3xl p-5">
-            <div className="mb-4 flex items-start justify-between gap-3">
+            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="flex items-start gap-3">
                 <span className="card-icon card-icon-soft">
                   <ForecastIcon size={18} strokeWidth={2.2} />

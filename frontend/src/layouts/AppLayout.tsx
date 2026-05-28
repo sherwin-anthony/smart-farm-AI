@@ -9,12 +9,14 @@ import {
   Lightbulb,
   ListTodo,
   Mail,
+  Menu,
   Map,
   MoonStar,
   Search,
   Sprout,
   SunMedium,
   UserRound,
+  X,
 } from "lucide-react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../features/auth/AuthContext";
@@ -44,6 +46,7 @@ export default function AppLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isNavOpen, setIsNavOpen] = useState(false);
   const [theme, setTheme] = useState<ThemeMode>(() => getInitialTheme());
 
   useEffect(() => {
@@ -55,6 +58,7 @@ export default function AppLayout() {
     try {
       await logout();
       setIsProfileOpen(false);
+      setIsNavOpen(false);
       navigate("/login", { replace: true });
     } catch (error) {
       console.error("Logout failed.", error);
@@ -82,6 +86,16 @@ export default function AppLayout() {
 
       <header className="utility-header">
         <div className="utility-left">
+          <button
+            type="button"
+            className="utility-icon mobile-menu-button"
+            onClick={() => setIsNavOpen((open) => !open)}
+            aria-label={isNavOpen ? "Close navigation" : "Open navigation"}
+            aria-expanded={isNavOpen}
+          >
+            {isNavOpen ? <X size={18} strokeWidth={2.2} /> : <Menu size={18} strokeWidth={2.2} />}
+          </button>
+
           <NavLink
             to="/assistant"
             className={({ isActive }) =>
@@ -145,7 +159,13 @@ export default function AppLayout() {
                 <p className="helper-text">{user?.email}</p>
 
                 <div className="profile-panel-actions">
-                  <Link to="/profile" onClick={() => setIsProfileOpen(false)}>
+                  <Link
+                    to="/profile"
+                    onClick={() => {
+                      setIsProfileOpen(false);
+                      setIsNavOpen(false);
+                    }}
+                  >
                     View and edit profile
                   </Link>
                   <button type="button" className="secondary-button" onClick={handleLogout}>
@@ -158,12 +178,22 @@ export default function AppLayout() {
         </div>
       </header>
 
-      <aside className="app-sidebar">
+      {isNavOpen ? (
+        <button
+          type="button"
+          className="mobile-nav-backdrop"
+          aria-label="Close navigation"
+          onClick={() => setIsNavOpen(false)}
+        />
+      ) : null}
+
+      <aside className={isNavOpen ? "app-sidebar app-sidebar-open" : "app-sidebar"}>
         <nav className="layout-nav">
           {links.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
+              onClick={() => setIsNavOpen(false)}
               className={({ isActive }) =>
                 isActive ? "nav-link nav-link-active" : "nav-link"
               }

@@ -38,7 +38,6 @@ export default function PlotSummary({ plots }: PlotSummaryProps) {
       value: activePlots,
       copy: "Currently supporting active work",
       icon: Leaf,
-      strong:false,
     },
     {
       label: "Vacant plots",
@@ -66,11 +65,8 @@ export default function PlotSummary({ plots }: PlotSummaryProps) {
         const Icon = item.icon;
 
         return (
-          <article
-            key={item.label}
-            className={item.strong ? "summary-card summary-card-strong" : "summary-card"}
-          >
-            <span className={item.strong ? "card-icon" : "card-icon card-icon-soft"}>
+          <article key={item.label} className="summary-card">
+            <span className="card-icon card-icon-soft">
               <Icon size={18} strokeWidth={2.2} />
             </span>
             <p className="card-title">{item.label}</p>

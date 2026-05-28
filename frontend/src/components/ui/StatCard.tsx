@@ -8,10 +8,10 @@ type StatCardProps = {
   strong?: boolean;
 };
 
-export default function StatCard({ label, value, icon: Icon, note, strong = false }: StatCardProps) {
+export default function StatCard({ label, value, icon: Icon, note }: StatCardProps) {
   return (
-    <article className={strong ? "summary-card summary-card-strong" : "summary-card"}>
-      <span className={strong ? "card-icon" : "card-icon card-icon-soft"}>
+    <article className="summary-card">
+      <span className="card-icon card-icon-soft">
         <Icon size={18} strokeWidth={2.2} />
       </span>
       <p className="card-title">{label}</p>

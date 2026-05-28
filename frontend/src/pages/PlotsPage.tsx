@@ -99,7 +99,7 @@ export default function PlotsPage() {
     <div className="stack">
       <PageHeader
         title="Plots"
-        description="Manage field sections inside the refreshed malachite theme, with cleaner contrast, stronger cards, and softer hover motion."
+        description="Manage field sections, soil details, and plot readiness in a clean farm operations view."
       />
 
       {error ? <p className="text-danger">{error}</p> : null}

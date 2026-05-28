@@ -43,10 +43,10 @@ const fieldClassName =
   "w-full rounded-2xl border border-surface-border bg-surface-card px-4 py-3 text-sm text-ink shadow-sm";
 
 const priorityClass: Record<string, string> = {
-  urgent: "border-red-200 bg-red-50 text-red-700",
-  high: "border-amber-200 bg-amber-50 text-amber-700",
-  medium: "border-sky-200 bg-sky-50 text-sky-700",
-  low: "border-emerald-200 bg-emerald-50 text-emerald-700",
+  urgent: "tone-danger",
+  high: "tone-warning",
+  medium: "tone-info",
+  low: "tone-success",
 };
 
 const sourceIcon = (source: string): LucideIcon => {
