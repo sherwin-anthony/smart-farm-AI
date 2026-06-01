@@ -35,14 +35,20 @@ return [
         ],
     ],
     'weather' => [
-    // Start with Open-Meteo because it is easy to wire up for MVP.
-    'base_url' => env('WEATHER_API_BASE_URL', 'https://api.open-meteo.com/v1'),
+        // Start with Open-Meteo because it is easy to wire up for MVP.
+        'base_url' => env('WEATHER_API_BASE_URL', 'https://api.open-meteo.com/v1'),
     ],
 
-    '  openai' => [
-    // Keep the AI config in the backend only.
-    'api_key' => env('OPENAI_API_KEY'),
-    'model' => env('OPENAI_MODEL'),
+    'groq' => [
+        // Keep AI credentials in the backend only. Never send these to the frontend.
+        'base_url' => env('GROQ_BASE_URL', 'https://api.groq.com/openai/v1'),
+        'api_key' => env('GROQ_API_KEY'),
+        'model' => env('GROQ_MODEL', 'meta-llama/llama-4-scout-17b-16e-instruct'),
+    ],
+
+    'openai' => [
+        'api_key' => env('OPENAI_API_KEY'),
+        'model' => env('OPENAI_MODEL'),
     ],
 
 ];

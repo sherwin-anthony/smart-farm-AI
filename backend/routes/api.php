@@ -51,6 +51,12 @@ Route::middleware('web')->group(function () {
         Route::apiResource('yield-predictions', YieldPredictionController::class);
 
         // Assistant answers are crop-aware and scoped to the authenticated farm.
+        Route::get('assistant/conversations', [AssistantController::class, 'index']);
+        Route::post('assistant/conversations', [AssistantController::class, 'store']);
+        Route::get('assistant/conversations/{conversation}', [AssistantController::class, 'show']);
+        Route::patch('assistant/conversations/{conversation}', [AssistantController::class, 'update']);
+        Route::delete('assistant/conversations/{conversation}', [AssistantController::class, 'destroy']);
         Route::post('assistant/chat', [AssistantController::class, 'chat']);
+        Route::post('assistant/tasks', [AssistantController::class, 'createTask']);
     });
 });

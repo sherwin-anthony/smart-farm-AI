@@ -110,6 +110,7 @@ const sortTasks = (tasks: Task[]) => {
 export default function TasksPage() {
   const [searchParams] = useSearchParams();
   const initialSource = searchParams.get("source") ?? "all";
+  const initialDue = searchParams.get("due");
   const [tasks, setTasks] = useState<Task[]>([]);
   const [plots, setPlots] = useState<Plot[]>([]);
   const [crops, setCrops] = useState<Crop[]>([]);
@@ -128,7 +129,7 @@ export default function TasksPage() {
       : "all",
     plot_id: "all",
     crop_id: "all",
-    due: "all",
+    due: initialDue === "today" || initialDue === "overdue" ? initialDue : "all",
   });
 
   const loadTaskWorkspace = async () => {
